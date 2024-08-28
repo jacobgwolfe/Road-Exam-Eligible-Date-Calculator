@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Driver's License Eligibility Calculator</title>
+    <style>
+        #roadExamEligibility {
+            font-size: 24px; /* Adjust the font size as needed */
+        }
+    </style>
+</head>
+<body>
+    <h1>Driver's License Eligibility Calculator</h1>
+    <form id="eligibilityForm">
+        <label for="birthdate">Date of Birth:</label>
+        <input type="date" id="birthdate" required>
+        <br>
+        <label for="permitDate">Permit Issue Date:</label>
+        <input type="date" id="permitDate" required>
+        <br>
+        <button type="button" onclick="calculateEligibility()">Calculate Road Exam Eligibility Date</button>
+    </form>
+    <div id="roadExamEligibility"></div>
+    <div id="instructorContact"></div>
+
+    <script>
+        function calculateEligibility() {
+            var birthdate = new Date(document.getElementById('birthdate').value);
+            var permitDate = new Date(document.getElementById('permitDate').value);
+            
+            var roadExamEligibilityDate = new Date(permitDate);
+
+            // Calculate the minimum eligibility date based on the 6-month requirement
+            roadExamEligibilityDate.setMonth(roadExamEligibilityDate.getMonth() + 6);
+
+            // Calculate the student's 16th birthday
+            var sixteenthBirthday = new Date(birthdate);
+            sixteenthBirthday.setFullYear(sixteenthBirthday.getFullYear() + 16);
+
+            if (sixteenthBirthday > roadExamEligibilityDate) {
+                // If the student turns 16 within the 6-month period, use the 16th birthday as the eligibility date
+                roadExamEligibilityDate = sixteenthBirthday;
+            }
+
+            // Add one day to the eligibility date
+            roadExamEligibilityDate.setDate(roadExamEligibilityDate.getDate() + 1);
+
+            document.getElementById('roadExamEligibility').innerHTML = 'Road Exam Eligibility Date: ' + roadExamEligibilityDate.toDateString();
+
+            // Calculate the Estimated Contact from BTW Instructor date, which is 45 days prior to eligibility date
+            var instructorContactDate = new Date(roadExamEligibilityDate);
+            instructorContactDate.setDate(roadExamEligibilityDate.getDate() - 45);
+
+            document.getElementById('instructorContact').innerHTML = 'Estimated Contact from BTW Instructor: ' + instructorContactDate.toDateString();
+        }
+    </script>
+</body>
+</html>
